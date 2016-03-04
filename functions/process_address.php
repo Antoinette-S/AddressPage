@@ -48,9 +48,6 @@ if ($_POST['action'] == 'save address') {
         }
     }
 }
-else{
-    $_POST['edit_id'] = $_GET['edit'];
-}
 
 $addressForm->addressForm($id = $_POST['edit_id'], $type='save');
 

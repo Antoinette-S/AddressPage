@@ -13,9 +13,9 @@ $(document).ready(function(){
         var id=$(this).parent('div.buttons.edit_button').attr('id');
         var page= 'include/functions/process_address.php';
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url : page,
-                data: {edit : id},
+                data: {edit_id : id},
                 dataType: 'html',
                 beforeSend: function() {
                     ajaxindicatorstart();
@@ -31,9 +31,9 @@ $(document).ready(function(){
         var id='new';
         var page= 'include/functions/process_address.php';
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url : page,
-                data: {edit : id},
+                data: {edit_id : id},
                 dataType: 'html',
                 beforeSend: function() {
                     ajaxindicatorstart();
