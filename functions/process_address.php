@@ -1,6 +1,5 @@
 <?php
 include("addressLibrary.php");
-global $confirm;
 
 if ($_POST['action'] == 'save address') {
     $a = $_POST['address'];
@@ -49,6 +48,6 @@ if ($_POST['action'] == 'save address') {
     }
 }
 
-$addressForm->addressForm($id = $_POST['edit_id'], $type='save');
+$addressDisplay->addressDisplay($id = $_POST['edit_id'], $type='save');
 
 ?>

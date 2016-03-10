@@ -10,7 +10,6 @@ class check_address{
         if (isset($_SESSION['error']) && is_array($_SESSION['error']) && $_SESSION['order']['delivery']['address'] != 'pickup') {
             echo "<div class='addressInfo' id='error' style='margin-left: 10px;'><strong>Please use the form below to correct the following errors:</strong><ul><li>" . implode('</li><li>', $error) . "</li></ul></div>";
         }
-        unset($_POST['action']);
         return $error;
     }
 
@@ -34,12 +33,12 @@ class check_address{
         if (!$this->state_error($address)) {
             $_SESSION['error']['no_state'] = "You must select a valid state.";
         }
-        if (!$address['phone']&& trim($address['phone']) == "") {
+        if ($_SESSION['error']['no_phone'] || trim($address['phone']) == "") {
             $_SESSION['error']['no_phone'] = "You must provide a valid phone number.";
         }
 
-        if (trim($address['zip']) == "" || !is_numeric($address['zip'])) {
-            $_SESSION['error']['no_zip'] = "You must provide a numeric zip code.";
+        if (strlen($address['zip']) !== 5 || !is_numeric($address['zip'])) {
+            $_SESSION['error']['no_zip'] = "You must provide a valid zip code.";
         }
 
         $e = $_SESSION['error'];
@@ -69,7 +68,7 @@ class check_address{
         (isset($address['address_3']) ?: $_SESSION['error']['no_floor'] = true);
         ((trim($address['address_3']) == "") ? $_SESSION['error']['no_floor'] = true : '');
         (trim($address['city']) == "" ? $_SESSION['error']['no_city'] = true : '');
-        (trim($address['zip']) == "" ? $_SESSION['error']['no_zip'] = true: '');
+        (strlen($address['zip']) !== 5 ? $_SESSION['error']['no_zip'] = true: '');
 
         if (empty($_SESSION['error']['no_phone'])) {
             $phone = sprintf("(%s) %s-%s", substr($address['phone'], 0, 3), substr($address['phone'], 3, 3), substr($address['phone'], 6));
@@ -105,13 +104,12 @@ class check_address{
         $url = "http://maps.google.com/maps/api/geocode/json?address={$address}";
         $resp_json = file_get_contents($url);
         $resp = json_decode($resp_json, true);
+        $find = $resp['results'][0]['address_components'];
 
         // response status will be 'OK', if able to geocode given address
         if ($resp['status'] == 'OK') {
             // get state data
-            $state = $resp['results'][0]['address_components'][6]['short_name'];
-
-            if($state == $core_address[2]){
+            if(in_array($core_address[2] ,array_column($find, 'short_name'))){
                 return true;
             }
             else{

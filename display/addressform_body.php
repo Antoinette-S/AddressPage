@@ -1,18 +1,23 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Antoinette
+ * User: Paty-A
  * Date: 2/23/16
  * Time: 1:44 PM
  */
 class addressForm_Body{
     function build_FormBody($array){
-        if (isset($array) && is_array($array)) {
+        if (isset($array) && is_array($array) && !$_POST['action']) {
             $formBody = self::get_FormBody($array);
         }
-        else {
+        elseif(!$_POST['address']) {
             $formBody = self::get_FormBody('');
         }
+        else {
+            global $aArgs;
+            $formBody = self::get_FormBody($aArgs);
+        }
+
         return $formBody;
     }
 
@@ -50,16 +55,20 @@ class addressForm_Body{
         foreach ($error as $e => $str) {
             $key = substr($e, strpos($e, "_") + 1);
             if (strpos(strtolower($v), $key)) {
-                if ($key !== 'state') {
+                if ($key !== 'state' && $key !== 'phone') {
                     $HTML::openDiv('error');
                     call_user_func(array($buildPanel, $v), $array);
                     $HTML::closeDiv();
-                } elseif(strpos(strtolower($v), $key) && $key == 'state') {
+                } elseif($key === 'state') {
                     $HTML::openDiv('error');
                     $option = $formatPanel::formatPanel_State($array);
                     call_user_func(array($buildPanel, $v), $option);
                     $HTML::closeDiv();
-
+                }
+                elseif($key === 'phone'){
+                    $HTML::openDiv('error');
+                    $formatPanel::formatPanel_Phone($array);
+                    $HTML::closeDiv();
                 }
                 return true;
             }

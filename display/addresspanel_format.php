@@ -21,13 +21,15 @@ class addressPanel_Format extends addressPanel_Build{
     function formatPanel_Phone($array){
         global $db;
         $num = $array['phone'];
+
         if (empty($num)) {
             $user = $db->get_user_info_by_id($_SESSION['js_user_id']);
             $num = sprintf("(%s) %s-%s",
                 substr($user['default_phone'], 0, 3),
                 substr($user['default_phone'], 3, 3),
                 substr($user['default_phone'], 6));
-        } else {
+        } else{
+            $num = preg_replace('/\D+/', '', ($num));
             $num = sprintf("(%s) %s-%s",
                 substr($num, 0, 3),
                 substr($num, 3, 3),
