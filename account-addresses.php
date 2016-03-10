@@ -1,29 +1,31 @@
-<?php
+<?php 
 include_once("settings.php");
 include_once("include/frontend_functions.php");
 include_once("include/login_functions.php");
 include_once("include/geocode_functions.php");
+
 include("include/session.php");
 
 /*
- * DEFAULT VALUES FOR USER (ADDRESS, PAYMENT, etc.)
+ * DEFAULT VALUES FOR USER (ADDRESS)
  */
 $addresses = $db->get_delivery_addresses_by_user_id($_SESSION['js_user_id']);
+
 ?>
 
 <?php include_once("html-head.php");?>
 <body>
 
-<?php include_once("header.php"); ?>
+	<?php include_once("header.php"); ?>
 
-<div class="wrapper">
-  <div id="main">
-    <h1 class="offscreen">My Addresses</h1>
-
-    <div class="box box-extra-thin">
-      <?php side_welcome();
-      side_nav(); ?>
-    </div>
+	<div class="wrapper">
+		<div id="main">
+		<h1 class="offscreen">My Addresses</h1>
+        
+			<div class="box box-extra-thin">
+				<?php side_welcome();
+				side_nav(); ?>
+			</div>
 
     <div class="box box-standard">
       <?php if(isset($_SESSION['js_action']) && $_SESSION['js_action']=='addupdate'){ ?>
@@ -73,7 +75,7 @@ $addresses = $db->get_delivery_addresses_by_user_id($_SESSION['js_user_id']);
               <?php if($a['default']==1){?>
                 <p><b>Default Address</b></p>
               <?php };?>
-              <?php show_row(htmlspecialchars_decode($a['comments']), '<p class="delivery_info">', '</p>');?>
+              <?php show_row(htmlspecialchars_decode($a['comments']), '<p class="delivery_info">', '</p>'); ?>
             </div>
 
 
@@ -98,12 +100,12 @@ $addresses = $db->get_delivery_addresses_by_user_id($_SESSION['js_user_id']);
       <?php } ?>
 
         <a class="form-link add_address" href="#">+ add another address</a>
-    <!---->
+
+    </div>
     </div>
   </div>
-</div>
 
-<?php include_once("footer.php"); ?>
+	<?php include_once("footer.php"); ?>
 
 </body>
 </html>
