@@ -9,6 +9,11 @@ include("include/session.php");
 /*
  * DEFAULT VALUES FOR USER (ADDRESS)
  */
+
+if(!isset($_SESSION['js_user_id'])){
+  jsoo_redirect(BASE_URL);
+}
+
 $addresses = $db->get_delivery_addresses_by_user_id($_SESSION['js_user_id']);
 
 ?>
@@ -79,8 +84,8 @@ $addresses = $db->get_delivery_addresses_by_user_id($_SESSION['js_user_id']);
             </div>
 
 
-            <form name="edit-address-form" id="edit-address-form" class="button-form edit-form" action="" method="POST">
-              <div class="buttons edit_button" id="<?= $a['id'];?>">
+            <form name="edit-address-form" id="edit-address-form" class="button-form edit-form" action="<?php echo BASE_URL; ?>include/functions/process_address.php?edit=<?= $a['id'];?>" method="POST">
+              <div class="buttons edit_button">
                 <button class="edit button" type="submit" >
                   Edit
                 </button>
@@ -99,7 +104,7 @@ $addresses = $db->get_delivery_addresses_by_user_id($_SESSION['js_user_id']);
         <?php } ?>
       <?php } ?>
 
-        <a class="form-link add_address" href="#">+ add another address</a>
+        <a class="form-link add_address" href="<?php echo BASE_URL; ?>include/functions/process_address.php?edit=new">+ add another address</a>
 
     </div>
     </div>
