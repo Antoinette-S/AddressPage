@@ -1,8 +1,30 @@
 <?php
+/**
+ * Description: class to validate post information
+ * and set session error on invalid input,
+ * extends addressValidation page
+ *
+ * includes general and requirement errors,
+ * address validation, and the display of errors
+ * on invalid input
+ */
 
-class check_address{
 
-    function check_error($check_address){
+class check_address extends confirm{
+
+    /**
+     * Instructions: expects array of values
+     * to pass to private functions that
+     * check for errors
+     * Description: echos out div panel
+     * containing warning and list of returned
+     * errors
+     *
+     * @param $check_address
+     * @return mixed, session errors that
+     * were set by private functions
+     */
+    public function check_error($check_address){
         echo '';
         $error = $this->requirement_error($check_address);
         $error = $this->general_error($check_address);
@@ -13,7 +35,15 @@ class check_address{
         return $error;
     }
 
-    function requirement_error($address){
+    /**
+     * Description: checks array values
+     * for empty or invalid input
+     *
+     * @param $address
+     * @return mixed, returns session error
+     * array if input is invalid
+     */
+    private function requirement_error($address){
         if (trim($address['address_name']) == "") {
             $_SESSION['error']['no_name'] = "You must provide an address name.";
         }
@@ -45,7 +75,16 @@ class check_address{
         return $e;
     }
 
-    function general_error($address){
+    /**
+     * Description: takes address array and checks
+     * values to find store, if no store is found
+     * returns general error
+     *
+     * @param $address
+     * @return mixed, returns session error array
+     * if store location is invalid
+     */
+    private function general_error($address){
         global $confirm;
         $assigned_store = $confirm->assign_store($address['lat'], $address['lng']);
 
@@ -57,7 +96,13 @@ class check_address{
         return $e;
     }
 
-    function address_validation($address) {
+    /**
+     *Description: validates address input
+     *
+     * @param $address
+     * @return mixed, array of addresses
+     */
+    public function address_validation($address) {
         global $db;
         unset($_SESSION['error']);
 
@@ -83,7 +128,16 @@ class check_address{
         return $address;
     }
 
-    function state_error($address){
+    /**
+     * Description: private function to
+     * check for state error. Takes address
+     * array and checks google geocode
+     * data for a match on state abbr.
+     *
+     * @param $address
+     * @return bool
+     */
+    private function state_error($address){
         /**
          * original function: $confirm->geocode($address)
          * @params: $address array
@@ -108,7 +162,7 @@ class check_address{
 
         // response status will be 'OK', if able to geocode given address
         if ($resp['status'] == 'OK') {
-            // get state data
+            // check state data
             if(in_array($core_address[2] ,array_column($find, 'short_name'))){
                 return true;
             }
@@ -121,4 +175,3 @@ class check_address{
 
     }
 }
-?>

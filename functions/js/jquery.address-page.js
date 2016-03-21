@@ -2,7 +2,7 @@ $(document).ready(function(){
     var page = 'include/functions/process_address.php';
 
     function ajaxindicatorstart(){
-        var gif= $('div.box.box-standard').html('<img alt="" src="../img/Loading_icon.gif" style="opacity: 0.3;"/>');
+        var gif= $('div.box.box-standard').empty().append('<img alt="" src="../img/Loading_icon.gif" style="opacity: 0.3;"/>');
         gif.fadeIn(300);
     }
 
@@ -21,37 +21,30 @@ $(document).ready(function(){
     });
 
 
-
     $("button.edit.button").click(function(e) {
         e.preventDefault();
-        var id=$(this).parent('div.buttons.edit_button').attr('id');
             $.ajax({
-                type: 'POST',
-                url : page,
-                data: {edit_id : id},
-                dataType: 'html',
+                type: 'GET',
+                url : $(this).closest('form.button-form.edit-form').attr('action'),
                 beforeSend: function() {
                     ajaxindicatorstart();
                 },
                 success: function(response){
-                    $('div.box.box-standard').html(response).fadeIn('slow');
+                    $('div.box.box-standard').empty().append(response).fadeIn('slow');
                 }
             });
     });
 
     $("a.form-link.add_address").click(function(e) {
         e.preventDefault();
-        var id='new';
             $.ajax({
-                type: 'POST',
-                url : page,
-                data: {edit_id : id},
-                dataType: 'html',
+                type: 'GET',
+                url : $(this).closest('a.form-link.add_address').attr('href'),
                 beforeSend: function() {
                     ajaxindicatorstart();
                 },
                 success: function(response){
-                    $('div.box.box-standard').html(response).fadeIn('slow');
+                    $('div.box.box-standard').empty().append(response).fadeIn('slow');
                 }
             });
     });
@@ -71,7 +64,7 @@ $(document).ready(function(){
                 success: function (response) {
                     var error = $(response).filter('#error').text();
                     if(error){
-                        $('div.box.box-standard').html(response);
+                        $('div.box.box-standard').empty().append(response);
                     }
                     else{
                         location.assign("account-addresses.php");

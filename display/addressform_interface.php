@@ -9,8 +9,6 @@
 interface addressForm_Interface{
     function buildAddress_Header($id);
     function buildAddress_Form();
-    function buildAddress_FormBody($id);
+    function buildAddress_FormBody($id, $type);
     function buildAddress_Footer();
 }
-
-?>

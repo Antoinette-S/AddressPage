@@ -4,10 +4,21 @@
  * User: Paty-A
  * Date: 2/11/16
  * Time: 3:13 PM
+ * Description: methods to update
+ * or add information to address
+ * tables in DB as well as check
+ * for duplication
  */
 
-class address_functions
-{
+class address_functions{
+
+    /**
+     * Description: checks if POST
+     * set a default address and
+     * updates in DB
+     *
+     * @param $aArgs
+     */
     function reset_default($aArgs){
         global $db;
         if ($aArgs['default'] == '1') {
@@ -15,6 +26,14 @@ class address_functions
         }
     }
 
+    /**
+     * Description: checks if POST edit
+     * id can be updated in db with new
+     * POST array, & sets session
+     * with value
+     *
+     * @param $aArgs
+     */
     function update_address($aArgs){
         global $db;
         if ($db->update_delivery_address($_POST['edit_id'], $aArgs)) {
@@ -24,6 +43,14 @@ class address_functions
         }
     }
 
+    /**
+     * Description: check if address
+     * can be added in DB, sets session
+     * action if true, checks for error
+     * if false
+     *
+     * @param $aArgs
+     */
     function add_address($aArgs){
         global $db;
         global $errorCheck;
@@ -38,6 +65,15 @@ class address_functions
         }
     }
 
+    /**
+     * Description: checks array values
+     * against current user addresses
+     * in db for a match, if true
+     * sets session js_action to
+     * exists
+     *
+     * @param $aArgs
+     */
     function match_address($aArgs){
         global $db;
         $aArgs['user_id'] = $_SESSION['js_user_id'];
@@ -55,4 +91,3 @@ class address_functions
         }
     }
 }
-?>

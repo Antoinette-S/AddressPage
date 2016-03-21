@@ -7,11 +7,12 @@
  */
 class confirm{
 
-    function remove_slashes($string) {
+    public function remove_slashes($string) {
         $string=implode("",explode("\\",$string));
         return stripslashes(trim($string));
     }
-    function strip_tags_content($text, $tags = '', $invert = FALSE) {
+
+    public function strip_tags_content($text, $tags = '', $invert = FALSE) {
         preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags);
         $tags = array_unique($tags[1]);
         if(is_array($tags) AND count($tags) > 0) {
@@ -28,7 +29,7 @@ class confirm{
         return $text;
     }
 
-    function assign_store($lat, $long) {
+    protected function assign_store($lat, $long) {
         $store = $this->get_delivery_store($lat, $long);
         if ($_SESSION['order']['store'] != $store) {
             $_SESSION['order']['store'] = $store;
@@ -36,7 +37,7 @@ class confirm{
         return $store;
     }
 
-    function get_delivery_store($ulat, $ulng) {
+    protected function get_delivery_store($ulat, $ulng) {
         global $db;
         /* check all stores for address contained */
         $stores = $db->get_all_stores();
@@ -52,7 +53,7 @@ class confirm{
         return false;
     }
 
-    function get_polygon($store) {
+    private function get_polygon($store) {
         global $db;
         $coords = $db->get_store_polygon_by_id($store);
         if(is_array($coords)) {
@@ -66,7 +67,7 @@ class confirm{
     }
 
 
-    function geocode($address){
+    public function geocode($address){
         include('geolocation.php');
         /**
          * @params: $address array

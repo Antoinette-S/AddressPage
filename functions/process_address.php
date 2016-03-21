@@ -1,5 +1,14 @@
 <?php
-include("addressLibrary.php");
+require_once("addressLibrary.php");
+
+/**
+ *
+ * Description: intermediary page that calls the form to be built,
+ * validates and sets errors, and passes
+ * post information to database via
+ * external methods
+ *
+ */
 
 if ($_POST['action'] == 'save address') {
     $a = $_POST['address'];
@@ -23,9 +32,8 @@ if ($_POST['action'] == 'save address') {
     );
 
     foreach ($aArgs as $key => $value) {
-        $value = $confirm->remove_slashes($value);
-        $value = $confirm->strip_tags_content($value);
-        $aArgs[$key] = $value;
+        $aArgs[$key] = $confirm->remove_slashes($value);
+        $aArgs[$key] = $confirm->strip_tags_content($value);
     }
 
     $aArgs = $errorCheck->address_validation($aArgs);
@@ -47,7 +55,8 @@ if ($_POST['action'] == 'save address') {
         }
     }
 }
+else{
+    $_POST['edit_id']= $_GET['edit'];
+}
 
-$addressDisplay->addressDisplay($id = $_POST['edit_id'], $type='save');
-
-?>
+$addressForm->addressDisplay($id = $_POST['edit_id'], $type='save');
